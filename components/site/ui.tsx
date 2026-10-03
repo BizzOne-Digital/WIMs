@@ -43,7 +43,7 @@ export function Logo({ size = 'sm' }: { size?: 'sm' | 'lg' }) {
 // Page hero background photo: graded, shaded, drifting slower than the page. Photos appear only in heroes.
 function HeroImage({ name }: { name: SectionImageName }) {
   return (
-    <div className="hero-image" aria-hidden="true">
+    <div className="hero-image" data-image={name} aria-hidden="true">
       <div className="hero-image-inner"><Image src={images[name].src} alt="" fill sizes="100vw" priority /></div>
     </div>
   )

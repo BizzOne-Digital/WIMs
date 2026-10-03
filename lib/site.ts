@@ -52,15 +52,16 @@ export const faqs = [
 export const images = {
   hero: { src: '/wims-hero.png', alt: 'A WIMs professional standing in a dark glass studio crossed by lines of golden light', width: 1376, height: 768 },
   // Inner-page hero backgrounds: art-directed crops of the hero photo (public/images/). Replace src with client photos as they arrive.
-  architecture: { src: '/images/wims-architecture.jpg', alt: '' },
   network: { src: '/images/wims-network.jpg', alt: '' },
   studio: { src: '/images/wims-studio.jpg', alt: '' },
   stair: { src: '/images/wims-stair.jpg', alt: '' },
+  // Client image: "AI Business School" scene. Testimonials hero background + home hero crossfade.
+  school: { src: '/images/wimimg.png', alt: '' },
 }
-export type SectionImageName = 'architecture' | 'network' | 'studio' | 'stair'
+export type SectionImageName = 'network' | 'studio' | 'stair' | 'school'
 
-// Client image: "AI Business School" scene (public/images/wimimg.png). Crossfades with the home hero photo.
-export const heroAlt = { src: '/images/wimimg.png', alt: '' }
+// Second home hero image, crossfading with the main photo.
+export const heroAlt = images.school
 
 // Member company logos, cut from the client's flyer (public/images/image.png). WIMs confirmed permission to display them (2026-10-04).
 export const memberLogos = [

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function Testimonials() {
   return (
     <>
-      <PageHero crumb="Testimonials" image="architecture" title="Member stories, in their own words." deck={copy.trusted} />
+      <PageHero crumb="Testimonials" image="school" title="Member stories, in their own words." deck={copy.trusted} />
 
       <section className="sec sec-light" aria-label="Testimonial videos">
         <div className="frame">
