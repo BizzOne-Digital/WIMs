@@ -161,7 +161,7 @@ Only `transform` and `opacity` are animated (plus `stroke-dashoffset` for the Co
 
 1. Logo: approve the single-colour globe and the typographic wordmark (§3).
 2. Photography: real member/founder imagery and the testimonial videos (§6).
-3. Permission to name member employers (Nasdaq, Amazon, Marriott, Leadpoet, Aramark). Use text only, no logos without permission.
+3. ~~Permission to name member employers~~ **Confirmed (2026-10-04):** WIMs has permission to display the member companies' names and logos (Nasdaq, Amazon, Marriott International, Leadpoet, Aramark).
 4. The contact form needs a real endpoint; it currently only fakes success.
 5. Single page vs. multi-page (the Privacy and Terms links currently go to 404).
 

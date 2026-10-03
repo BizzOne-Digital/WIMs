@@ -59,6 +59,18 @@ export const images = {
 }
 export type SectionImageName = 'architecture' | 'network' | 'studio' | 'stair'
 
+// Client image: "AI Business School" scene (public/images/wimimg.png). Crossfades with the home hero photo.
+export const heroAlt = { src: '/images/wimimg.png', alt: '' }
+
+// Member company logos, cut from the client's flyer (public/images/image.png). WIMs confirmed permission to display them (2026-10-04).
+export const memberLogos = [
+  { name: 'Nasdaq', src: '/images/logo-nasdaq.png', width: 207, height: 71 },
+  { name: 'Amazon', src: '/images/logo-amazon.png', width: 189, height: 72 },
+  { name: 'Marriott International', src: '/images/logo-marriott.png', width: 176, height: 62 },
+  { name: 'Leadpoet', src: '/images/logo-leadpoet.png', width: 259, height: 71 },
+  { name: 'Aramark', src: '/images/logo-aramark.png', width: 243, height: 78 },
+]
+
 // Client testimonial videos. Add { title, name, role, src: '/videos/x.mp4', poster: '/videos/x.jpg' }.
 export type Testimonial = { title: string; name?: string; role?: string; src?: string; poster?: string }
 export const testimonials: Testimonial[] = [

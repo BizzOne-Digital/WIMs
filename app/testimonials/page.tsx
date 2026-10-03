@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { VideoCard } from '@/components/site/video-card'
-import { Cta, PageHero, Words, vars } from '@/components/site/ui'
+import { Cta, LogoStrip, PageHero, Words, vars } from '@/components/site/ui'
 import { copy, site, testimonials } from '@/lib/site'
 
 export const metadata: Metadata = {
@@ -16,6 +16,7 @@ export default function Testimonials() {
 
       <section className="sec sec-light" aria-label="Testimonial videos">
         <div className="frame">
+          <LogoStrip label="Trusted by employees from" />
           <div className="reels reels-wall">
             {testimonials.map((t, i) => <VideoCard key={i} item={t} index={i} large={i === 0} />)}
           </div>

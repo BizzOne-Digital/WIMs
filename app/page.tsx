@@ -2,8 +2,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
 import { VideoCard } from '@/components/site/video-card'
-import { Cta, Words, vars } from '@/components/site/ui'
-import { companies, copy, images, site, testimonials } from '@/lib/site'
+import { Cta, LogoStrip, Words, vars } from '@/components/site/ui'
+import { companies, copy, heroAlt, images, site, testimonials } from '@/lib/site'
 
 export default function Home() {
   return (
@@ -11,7 +11,8 @@ export default function Home() {
       {/* Act 1: the hook */}
       <section className="hero" aria-labelledby="hero-title">
         <div className="hero-media">
-          <Image src={images.hero.src} alt={images.hero.alt} fill priority sizes="100vw" />
+          <Image className="hero-slide" src={images.hero.src} alt={images.hero.alt} fill priority sizes="100vw" />
+          <Image className="hero-slide hero-slide-alt" src={heroAlt.src} alt={heroAlt.alt} fill loading="eager" sizes="100vw" />
         </div>
         <div className="hero-veil" aria-hidden="true" />
         <div className="hero-sweep" aria-hidden="true" />
@@ -133,6 +134,7 @@ export default function Home() {
               {testimonials.filter((t) => t.src).slice(0, 3).map((t, i) => <VideoCard key={i} item={t} index={i} large={i === 0} />)}
             </div>
           )}
+          <LogoStrip />
           <div className="trust-cta" data-reveal="fade"><Cta href="/testimonials" variant="line">View member stories</Cta></div>
         </div>
       </section>

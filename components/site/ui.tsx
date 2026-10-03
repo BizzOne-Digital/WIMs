@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, ArrowUpRight } from 'lucide-react'
-import { images, type SectionImageName } from '@/lib/site'
+import { images, memberLogos, type SectionImageName } from '@/lib/site'
 
 type CSSVars = React.CSSProperties & Record<`--${string}`, string | number>
 export const vars = (v: Record<string, string | number>) => Object.fromEntries(Object.entries(v).map(([k, val]) => [`--${k}`, val])) as CSSVars
@@ -45,6 +45,22 @@ function HeroImage({ name }: { name: SectionImageName }) {
   return (
     <div className="hero-image" aria-hidden="true">
       <div className="hero-image-inner"><Image src={images[name].src} alt="" fill sizes="100vw" priority /></div>
+    </div>
+  )
+}
+
+// Row of member company logos (client-supplied). Sits on white sections.
+export function LogoStrip({ label }: { label?: string }) {
+  return (
+    <div className="logo-strip">
+      {label && <p className="margin-note" data-reveal="fade">{label}</p>}
+      <ul className="logo-row" aria-label="Companies where members work or have worked">
+        {memberLogos.map((logo, i) => (
+          <li key={logo.name} data-reveal="fade" style={vars({ i })}>
+            <Image src={logo.src} alt={logo.name} width={logo.width} height={logo.height} sizes="180px" />
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }
