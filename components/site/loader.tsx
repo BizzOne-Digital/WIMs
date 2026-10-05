@@ -1,9 +1,8 @@
 import Image from 'next/image'
-import { site } from '@/lib/site'
 
 // Splash screen: plays on every full page load (not on in-app navigation, where the layout persists).
 // Pure CSS timing, so it always removes itself, even if JavaScript fails.
-export function Loader() {
+export function Loader({ legalName }: { legalName: string }) {
   return (
     <div className="loader" aria-hidden="true">
       <div className="loader-core">
@@ -13,7 +12,7 @@ export function Loader() {
         </div>
         <Image className="loader-word" src="/brand/wims-wordmark.png" alt="" width={298} height={84} sizes="150px" priority />
         <div className="loader-bar"><span /></div>
-        <p className="loader-name">{site.legalName}</p>
+        <p className="loader-name">{legalName}</p>
       </div>
     </div>
   )

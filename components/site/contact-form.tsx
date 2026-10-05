@@ -2,12 +2,10 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { ArrowRight, Check } from 'lucide-react'
-import { site } from '@/lib/site'
+import type { Content } from '@/lib/content'
 
 type Status = 'idle' | 'sending' | 'sent' | 'handoff' | 'error'
 type Errors = Partial<Record<'name' | 'email' | 'message', string>>
-
-const interests = ['WIMs community', 'AI lead generation services', 'Both']
 
 function validate(d: FormData): Errors {
   const e: Errors = {}
@@ -19,28 +17,28 @@ function validate(d: FormData): Errors {
   return e
 }
 
-// Connect a backend by setting NEXT_PUBLIC_INQUIRY_ENDPOINT (JSON POST). Without one, the inquiry
-// is handed to the visitor's email app so it still reaches WIMs.
-async function submitInquiry(data: Record<string, string>): Promise<'sent' | 'handoff'> {
-  if (site.inquiryEndpoint) {
-    const res = await fetch(site.inquiryEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
-    if (!res.ok) throw new Error(String(res.status))
-    return 'sent'
-  }
+// Inquiries are saved to the database (see /admin/inquiries). If the database isn't configured yet,
+// the inquiry is handed to the visitor's email app instead, so it still reaches WIMs.
+async function submitInquiry(data: Record<string, string>, email: string): Promise<'sent' | 'handoff'> {
+  const res = await fetch('/api/inquiry', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+  if (res.ok) return 'sent'
+  if (res.status !== 503) throw new Error(String(res.status))
   const body = `${data.message}\n\n${data.name}${data.organization ? `, ${data.organization}` : ''}\n${data.email}\nInterested in: ${data.interest}`
-  window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(`WIMs inquiry: ${data.interest}`)}&body=${encodeURIComponent(body)}`
+  window.location.href = `mailto:${email}?subject=${encodeURIComponent(`WIMs inquiry: ${data.interest}`)}&body=${encodeURIComponent(body)}`
   return 'handoff'
 }
 
-export function ContactForm() {
+export function ContactForm({ email, copy }: { email: string; copy: Content['contact'] }) {
+  const interests = copy.interests
   const [status, setStatus] = useState<Status>('idle')
   const [errors, setErrors] = useState<Errors>({})
   const [interest, setInterest] = useState(interests[0])
   const form = useRef<HTMLFormElement>(null)
 
   useEffect(() => {
-    if (new URLSearchParams(window.location.search).get('interest') === 'lead-generation') setInterest(interests[1])
-  }, [])
+    if (new URLSearchParams(window.location.search).get('interest') !== 'lead-generation') return
+    setInterest(interests.find((o) => /lead/i.test(o)) ?? interests[0])
+  }, [interests])
 
   function checkField(e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) {
     if (!form.current) return
@@ -58,7 +56,7 @@ export function ContactForm() {
     if (first) return e.currentTarget.querySelector<HTMLElement>(`[name="${first}"]`)?.focus()
     setStatus('sending')
     try {
-      setStatus(await submitInquiry(Object.fromEntries([...d.entries()].map(([k, v]) => [k, String(v).trim()]))))
+      setStatus(await submitInquiry(Object.fromEntries([...d.entries()].map(([k, v]) => [k, String(v).trim()])), email))
     } catch {
       setStatus('error')
     }
@@ -68,8 +66,8 @@ export function ContactForm() {
     return (
       <div className="form-done" role="status">
         <span className="form-done-icon"><Check aria-hidden="true" /></span>
-        <h2>{status === 'sent' ? 'Inquiry sent.' : 'Your email app is open.'}</h2>
-        <p>{status === 'sent' ? 'Thank you. The WIMs team will reply to the email address you provided.' : `Your inquiry is written and addressed to ${site.email}. Send it from your email app to reach the WIMs team.`}</p>
+        <h2>{status === 'sent' ? copy.successTitle : 'Your email app is open.'}</h2>
+        <p>{status === 'sent' ? copy.successText : `Your inquiry is written and addressed to ${email}. Send it from your email app to reach the WIMs team.`}</p>
         <button className="link-btn" type="button" onClick={() => setStatus('idle')}>Write another inquiry</button>
       </div>
     )
@@ -81,7 +79,7 @@ export function ContactForm() {
   return (
     <form ref={form} className="inquiry" onSubmit={onSubmit} noValidate data-status={status}>
       <fieldset className="choice">
-        <legend>I’m interested in</legend>
+        <legend>{copy.interestLabel}</legend>
         <div className="choice-row">
           {interests.map((option) => (
             <label key={option} className="choice-opt">
@@ -92,14 +90,16 @@ export function ContactForm() {
         </div>
       </fieldset>
       <div className="field-pair">
-        <label className="field"><span>Name</span><input {...field('name')} autoComplete="name" />{error('name')}</label>
-        <label className="field"><span>Email</span><input {...field('email')} type="email" autoComplete="email" inputMode="email" />{error('email')}</label>
+        <label className="field"><span>{copy.nameField}</span><input {...field('name')} autoComplete="name" />{error('name')}</label>
+        <label className="field"><span>{copy.emailField}</span><input {...field('email')} type="email" autoComplete="email" inputMode="email" />{error('email')}</label>
       </div>
-      <label className="field"><span>Organization <em>(optional)</em></span><input name="organization" autoComplete="organization" /></label>
-      <label className="field"><span>What are you building?</span><textarea {...field('message')} rows={5} />{error('message')}</label>
-      {status === 'error' && <p className="form-error" role="alert">The inquiry didn’t send. Try again, or email <a href={`mailto:${site.email}`}>{site.email}</a> directly.</p>}
+      <label className="field"><span>{copy.organizationField} <em>(optional)</em></span><input name="organization" autoComplete="organization" /></label>
+      {/* Honeypot: invisible to people, filled in by bots. */}
+      <input className="hp" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+      <label className="field"><span>{copy.messageField}</span><textarea {...field('message')} rows={5} />{error('message')}</label>
+      {status === 'error' && <p className="form-error" role="alert">The inquiry didn’t send. Try again, or email <a href={`mailto:${email}`}>{email}</a> directly.</p>}
       <button className="cta cta-solid form-submit" type="submit" disabled={status === 'sending'}>
-        <span className="cta-label">{status === 'sending' ? 'Sending inquiry…' : 'Send inquiry'}</span>
+        <span className="cta-label">{status === 'sending' ? `${copy.submitLabel}…` : copy.submitLabel}</span>
         <span className="cta-icon" aria-hidden="true"><ArrowRight /></span>
       </button>
     </form>

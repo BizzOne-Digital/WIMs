@@ -1,35 +1,37 @@
 import Link from 'next/link'
-import { copy, nav, site } from '@/lib/site'
+import type { Content } from '@/lib/content'
+import type { NavItem } from './header'
 import { Logo } from './ui'
 
-export function Footer() {
+export function Footer({ content, nav }: { content: Content; nav: NavItem[] }) {
+  const { settings, footer, legal } = content
   return (
     <footer className="ftr">
       <div className="frame ftr-top">
         <div className="ftr-brand">
-          <Link href="/" className="brand" aria-label="WIMs home"><Logo size="lg" /></Link>
-          <p>{site.legalName}</p>
-          <p className="ftr-deck">{copy.heroDeck}</p>
+          <Link href="/" className="brand" aria-label={`${settings.name} home`}><Logo size="lg" /></Link>
+          <p>{settings.legalName}</p>
+          <p className="ftr-deck">{settings.description}</p>
         </div>
         <nav className="ftr-col" aria-label="Footer">
-          <h2>Explore</h2>
+          <h2>{footer.exploreLabel}</h2>
           {nav.map((item) => <Link key={item.href} href={item.href}>{item.label}</Link>)}
         </nav>
         <div className="ftr-col">
-          <h2>Community</h2>
-          <a href={site.nas} target="_blank" rel="noreferrer">{site.nasLabel}<span className="sr-only"> (opens in a new tab)</span></a>
-          <a href={site.social.youtube} target="_blank" rel="noreferrer">YouTube<span className="sr-only"> (opens in a new tab)</span></a>
-          <span>{site.social.handle}</span>
+          <h2>{footer.communityLabel}</h2>
+          <a href={settings.nasUrl} target="_blank" rel="noreferrer">{settings.nasLabel}<span className="sr-only"> (opens in a new tab)</span></a>
+          {settings.youtubeUrl && <a href={settings.youtubeUrl} target="_blank" rel="noreferrer">YouTube<span className="sr-only"> (opens in a new tab)</span></a>}
+          {settings.socialHandle && <span>{settings.socialHandle}</span>}
         </div>
         <div className="ftr-col">
-          <h2>Contact</h2>
-          <a href={`mailto:${site.email}`}>{site.email}</a>
-          <Link href="/contact">Send an inquiry</Link>
+          <h2>{footer.contactLabel}</h2>
+          <a href={`mailto:${settings.email}`}>{settings.email}</a>
+          <Link href="/contact">{footer.inquiryLink}</Link>
         </div>
       </div>
       <div className="frame ftr-bottom">
-        <span>© {new Date().getFullYear()} WIMs. All rights reserved.</span>
-        <div><Link href="/privacy">Privacy Policy</Link><Link href="/terms">Terms &amp; Conditions</Link></div>
+        <span>© {new Date().getFullYear()} {settings.name}. {footer.rights}</span>
+        <div><Link href="/privacy">{legal.privacy.title}</Link><Link href="/terms">{legal.terms.title}</Link></div>
       </div>
     </footer>
   )

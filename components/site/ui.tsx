@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, ArrowUpRight } from 'lucide-react'
-import { images, memberLogos, type SectionImageName } from '@/lib/site'
+import { resolveImage } from '@/lib/content/resolve'
 
 type CSSVars = React.CSSProperties & Record<`--${string}`, string | number>
 export const vars = (v: Record<string, string | number>) => Object.fromEntries(Object.entries(v).map(([k, val]) => [`--${k}`, val])) as CSSVars
@@ -41,23 +41,25 @@ export function Logo({ size = 'sm' }: { size?: 'sm' | 'lg' }) {
 }
 
 // Page hero background photo: graded, shaded, drifting slower than the page. Photos appear only in heroes.
-function HeroImage({ name }: { name: SectionImageName }) {
+function HeroImage({ src }: { src: string }) {
   return (
-    <div className="hero-image" data-image={name} aria-hidden="true">
-      <div className="hero-image-inner"><Image src={images[name].src} alt="" fill sizes="100vw" priority /></div>
+    <div className="hero-image" aria-hidden="true">
+      <div className="hero-image-inner"><Image src={src} alt="" fill sizes="100vw" priority /></div>
     </div>
   )
 }
 
 // Row of member company logos (client-supplied). Sits on white sections.
-export function LogoStrip({ label }: { label?: string }) {
+export type LogoItem = { name: string; image: string }
+export function LogoStrip({ logos, label }: { logos: LogoItem[]; label?: string }) {
+  if (!logos.length) return null
   return (
     <div className="logo-strip">
       {label && <p className="margin-note" data-reveal="fade">{label}</p>}
       <ul className="logo-row" aria-label="Companies where members work or have worked">
-        {memberLogos.map((logo, i) => (
-          <li key={logo.name} data-reveal="fade" style={vars({ i })}>
-            <Image src={logo.src} alt={logo.name} width={logo.width} height={logo.height} sizes="180px" />
+        {logos.filter((l) => l.image).map((logo, i) => (
+          <li key={`${logo.name}-${i}`} data-reveal="fade" style={vars({ i })}>
+            <Image src={resolveImage(logo.image, '')} alt={logo.name} width={240} height={80} sizes="180px" />
           </li>
         ))}
       </ul>
@@ -65,10 +67,11 @@ export function LogoStrip({ label }: { label?: string }) {
   )
 }
 
-export function PageHero({ crumb, title, deck, image, children }: { crumb: string; title: string; deck?: string; image?: SectionImageName; children?: React.ReactNode }) {
+export function PageHero({ crumb, title, deck, image, fallbackImage, children }: { crumb: string; title: string; deck?: string; image?: string; fallbackImage?: string; children?: React.ReactNode }) {
+  const src = image !== undefined ? resolveImage(image, fallbackImage ?? '') : ''
   return (
     <section className="page-hero">
-      {image && <HeroImage name={image} />}
+      {src && <HeroImage src={src} />}
       <div className="frame page-hero-inner">
         <nav className="crumb" aria-label="Breadcrumb" data-reveal="fade"><Link href="/">WIMs</Link><span aria-hidden="true" /> <span aria-current="page">{crumb}</span></nav>
         <h1 className="page-title" data-reveal="words"><Words text={title} /></h1>

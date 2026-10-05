@@ -4,10 +4,12 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ArrowUpRight } from 'lucide-react'
-import { nav, site } from '@/lib/site'
 import { Cta, Logo, vars } from './ui'
 
-export function Header() {
+export type NavItem = { href: string; label: string }
+type HeaderProps = { nav: NavItem[]; nasUrl: string; nasLabel: string; joinCta: string; email: string }
+
+export function Header({ nav, nasUrl, nasLabel, joinCta, email }: HeaderProps) {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -41,8 +43,8 @@ export function Header() {
             {nav.map((item) => <Link key={item.href} href={item.href} aria-current={current(item.href) ? 'page' : undefined}>{item.label}</Link>)}
           </nav>
           <div className="hdr-actions">
-            <a className="hdr-nas" href={site.nas} target="_blank" rel="noreferrer">NAS<ArrowUpRight aria-hidden="true" /><span className="sr-only"> community (opens in a new tab)</span></a>
-            <Cta href={site.nas} size="sm">Join the community</Cta>
+            {nasLabel && <a className="hdr-nas" href={nasUrl} target="_blank" rel="noreferrer">{nasLabel}<ArrowUpRight aria-hidden="true" /><span className="sr-only"> community (opens in a new tab)</span></a>}
+            <Cta href={nasUrl} size="sm">{joinCta}</Cta>
           </div>
           <button className="burger" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="menu">
             <span className="burger-label">{open ? 'Close' : 'Menu'}</span>
@@ -56,8 +58,8 @@ export function Header() {
           {nav.map((item, i) => <Link key={item.href} href={item.href} style={vars({ i })} aria-current={current(item.href) ? 'page' : undefined}>{item.label}</Link>)}
         </nav>
         <div className="frame menu-foot">
-          <Cta href={site.nas}>Join the community</Cta>
-          <a href={`mailto:${site.email}`}>{site.email}</a>
+          <Cta href={nasUrl}>{joinCta}</Cta>
+          <a href={`mailto:${email}`}>{email}</a>
         </div>
       </div>
     </>

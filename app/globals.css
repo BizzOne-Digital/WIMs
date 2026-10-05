@@ -229,6 +229,14 @@ html[data-seen] .loader { display:none; }
 .credential-line { color:var(--stone); font:600 12px/1 var(--sans); letter-spacing:.03em; }
 .credential-perk { max-width:20ch; margin-top:8px; font:400 clamp(22px, 2.2vw, 30px)/1.15 var(--serif); }
 
+/* ============ AI Club benefits ============ */
+.club-benefits { display:grid; gap:28px; margin-top:clamp(72px, 9vw, 128px); }
+.benefit-grid { list-style:none; padding:0; display:grid; grid-template-columns:repeat(3, 1fr); column-gap:clamp(24px, 3vw, 48px); border-top:1px solid var(--hair-dark); }
+.benefit-grid li { position:relative; display:flex; align-items:center; gap:16px; padding:clamp(20px, 2.4vw, 30px) 0; font:400 clamp(22px, 2vw, 30px)/1.2 var(--serif); letter-spacing:-.01em; }
+.benefit-grid li::before { content:''; width:7px; height:7px; flex:none; border:1px solid var(--gold); transform:rotate(45deg); }
+.benefit-grid li::after { content:''; position:absolute; left:0; right:0; bottom:0; height:1px; background:var(--hair-dark); transform-origin:left; }
+.hp { position:absolute; left:-9999px; width:1px; height:1px; opacity:0; pointer-events:none; }
+
 /* ============ Testimonials ============ */
 .trust-head { display:grid; grid-template-columns:3fr 9fr; gap:32px; align-items:start; }
 .trust-line { font:400 clamp(28px, 3vw, 46px)/1.16 var(--serif); letter-spacing:-.02em; }
@@ -262,8 +270,8 @@ html[data-seen] .loader { display:none; }
 .page-hero { isolation:isolate; }
 .hero-image { position:absolute; inset:0; z-index:-2; overflow:hidden; pointer-events:none; }
 .hero-image-inner { position:absolute; inset:-8% 0; }
-.hero-image img { object-fit:cover; opacity:.5; filter:saturate(.7) contrast(1.08) brightness(.9); }
-.hero-image[data-image='school'] img { opacity:.62; filter:saturate(.6) sepia(.22) contrast(1.06) brightness(.8); }
+/* One grade for every page-hero photo (admin uploads included), warmed toward the black/gold palette */
+.hero-image img { object-fit:cover; opacity:.6; filter:saturate(.62) sepia(.18) contrast(1.06) brightness(.84); }
 .hero-image::after { content:''; position:absolute; inset:0; background:
   linear-gradient(180deg, rgba(0,0,0,.6) 0%, rgba(0,0,0,.2) 35%, rgba(0,0,0,.55) 75%, var(--black) 100%),
   linear-gradient(90deg, rgba(0,0,0,.85) 0%, rgba(0,0,0,.35) 60%, rgba(0,0,0,.15) 100%); }
@@ -421,6 +429,7 @@ html[data-seen] .loader { display:none; }
   .field-pair { grid-template-columns:1fr; }
   .ftr-top { grid-template-columns:1fr 1fr; }
   .logo-row { grid-template-columns:repeat(2, 1fr); }
+  .benefit-grid { grid-template-columns:1fr 1fr; }
   .logo-row li + li { border-left:0; }
   .logo-row li:nth-child(even) { border-left:1px solid var(--hair-light); }
   .logo-row li:nth-child(n+3) { border-top:1px solid var(--hair-light); }
@@ -432,6 +441,7 @@ html[data-seen] .loader { display:none; }
   .hero-ctas .cta, .closing-ctas .cta, .lost-ctas .cta { width:100%; justify-content:space-between; }
   .hero-foot .hero-scroll { display:none; }
   .ftr-top { grid-template-columns:1fr; }
+  .benefit-grid { grid-template-columns:1fr; }
 }
 
 /* ============ Motion ============ */
