@@ -5,20 +5,21 @@ import { VideoCard } from '@/components/site/video-card'
 import { Club } from '@/components/site/club'
 import { Cta, LogoStrip, Words, vars } from '@/components/site/ui'
 import { getContent } from '@/lib/content'
-import { defaultContent } from '@/lib/content/defaults'
-import { resolveImage } from '@/lib/content/resolve'
+import { UPLOAD_PREFIX } from '@/lib/uploads'
 import { testimonials } from '@/lib/site'
 
 export default async function Home() {
   const { home, settings, navigation, services, club, logos } = await getContent()
   const heroTitle = home.heroLines.join(' ')
+  // Only admin-portal images; bundled static images never show in the hero.
+  const isAdminImage = (url?: string) => !!url && (url.startsWith(UPLOAD_PREFIX) || /^https?:\/\//.test(url))
   return (
     <>
       {/* Act 1: the hook */}
       <section className="hero" aria-labelledby="hero-title">
         <div className="hero-media">
-          <Image className="hero-slide" src={resolveImage(home.heroImage, defaultContent.home.heroImage)} alt={home.heroImageAlt} fill priority sizes="100vw" />
-          {home.heroAltImage && <Image className="hero-slide hero-slide-alt" src={resolveImage(home.heroAltImage, defaultContent.home.heroAltImage)} alt="" fill loading="eager" sizes="100vw" />}
+          {isAdminImage(home.heroImage) && <Image className="hero-slide" src={home.heroImage} alt={home.heroImageAlt} fill priority sizes="100vw" />}
+          {isAdminImage(home.heroAltImage) && <Image className="hero-slide hero-slide-alt" src={home.heroAltImage} alt="" fill loading="eager" sizes="100vw" />}
         </div>
         <div className="hero-veil" aria-hidden="true" />
         <div className="hero-sweep" aria-hidden="true" />

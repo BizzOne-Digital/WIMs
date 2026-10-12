@@ -145,8 +145,8 @@ html[data-seen] .loader { display:none; }
 
 /* ============ Hero ============ */
 .hero { position:relative; min-height:100svh; display:flex; align-items:flex-end; overflow:hidden; isolation:isolate; padding:calc(var(--header) + 72px) 0 32px; background:var(--black); }
-.hero-media { position:absolute; inset:-6% 0 0; z-index:-3; }
-.hero-media img { object-fit:cover; object-position:62% center; scale:-1 1; }
+.hero-media { position:absolute; inset:0; z-index:-3; }
+.hero-media img { object-fit:cover; object-position:center; scale:-1 1; }
 /* Second hero image (client "AI Business School" scene): not mirrored, graded toward the black/gold palette */
 .hero-media img.hero-slide-alt { object-position:center; scale:none; opacity:0; filter:saturate(.6) sepia(.22) brightness(.74) contrast(1.06); animation:hero-xfade 18s ease-in-out var(--intro) infinite; }
 .hero-veil { position:absolute; inset:0; z-index:-2; background:
@@ -417,7 +417,7 @@ html[data-seen] .loader { display:none; }
   .intro-grid, .pillar, .members-grid, .nas-grid, .advantage-grid, .trust-head, .split, .contact-grid, .legal-grid, .hero-ledger, .banner-foot { grid-template-columns:1fr; }
   .pillar { gap:10px; }
   .hero-line:last-child { padding-left:0; }
-  .hero-media img { object-position:30% center; }
+  .hero-media img { object-position:center; }
   .hero-veil { background:linear-gradient(180deg, rgba(0,0,0,.7) 0%, transparent 25%), linear-gradient(0deg, rgba(0,0,0,.96) 0%, rgba(0,0,0,.75) 45%, rgba(0,0,0,.15) 80%); }
   .portal, .credential { justify-self:stretch; max-width:none; }
   .portal { aspect-ratio:4 / 5; }
@@ -450,7 +450,7 @@ html[data-seen] .loader { display:none; }
   html { scroll-behavior:smooth; }
 
   /* Hero: one orchestrated entrance that starts as the loader lifts */
-  .hero-media img { animation:settle 3200ms var(--ease-out) var(--intro) both; }
+  .hero-media img { animation:fade-in 3200ms var(--ease-out) var(--intro) both; }
   .hero-title .w > span { animation:word-in 1200ms var(--ease-out) calc(var(--intro) + 120ms + var(--i) * 90ms) both; }
   .hero-kicker { animation:fade-up 900ms var(--ease-out) var(--intro) both; }
   .hero-ledger { animation:fade-up 1000ms var(--ease-out) calc(var(--intro) + 620ms) both; }
