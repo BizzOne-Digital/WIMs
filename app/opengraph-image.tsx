@@ -11,7 +11,13 @@ export const contentType = 'image/png'
 
 export default async function OpengraphImage() {
   const { home, settings } = await getContent()
-  const asset = async (...p: string[]) => `data:image/png;base64,${(await readFile(join(process.cwd(), 'public', ...p))).toString('base64')}`
+  // Satori only decodes PNG/JPEG, and needs the real MIME type — sniff it from the bytes, reject anything else.
+  const asset = async (...p: string[]) => {
+    const buf = await readFile(join(process.cwd(), 'public', ...p))
+    const mime = buf[0] === 0x89 && buf[1] === 0x50 ? 'png' : buf[0] === 0xff && buf[1] === 0xd8 ? 'jpeg' : null
+    if (!mime) throw new Error(`Unsupported OG image format: ${p.join('/')}`)
+    return `data:image/${mime};base64,${buf.toString('base64')}`
+  }
   // Hero photo: an admin upload (PNG/JPEG) from the database, a file in /public, or the default.
   const upload = parseUploadUrl(home.heroImage)
   const stored = upload ? await findUpload(upload.folder, upload.filename).catch(() => null) : null
