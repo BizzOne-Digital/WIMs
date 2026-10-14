@@ -1,12 +1,20 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Play } from 'lucide-react'
 import type { Testimonial } from '@/lib/site'
 
 export function VideoCard({ item, index, large }: { item: Testimonial; index: number; large?: boolean }) {
   const video = useRef<HTMLVideoElement>(null)
   const [playing, setPlaying] = useState(false)
+  // Pause when scrolled out of view.
+  useEffect(() => {
+    const el = video.current
+    if (!el) return
+    const io = new IntersectionObserver(([e]) => { if (!e.isIntersecting) el.pause() })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
   const label = `${item.title}${item.name ? ` — ${item.name}` : ''}`
 
   if (!item.src) {
@@ -23,7 +31,7 @@ export function VideoCard({ item, index, large }: { item: Testimonial; index: nu
   return (
     <figure className={`reel ${large ? 'reel-lg' : ''}`} data-reveal="clip" data-playing={playing}>
       <div className="reel-frame">
-        <video ref={video} src={item.src} poster={item.poster} preload="none" playsInline controls={playing} onPause={() => setPlaying(false)} onPlay={() => setPlaying(true)} aria-label={label} />
+        <video ref={video} src={item.src} poster={item.poster} preload="none" playsInline controls={playing} onPause={() => setPlaying(false)} onPlay={() => { document.querySelectorAll('video').forEach(v => v !== video.current && v.pause()); setPlaying(true) }} aria-label={label} />
         {!playing && (
           <button className="reel-play" onClick={() => video.current?.play()} aria-label={`Play ${label}`}><Play aria-hidden="true" /></button>
         )}

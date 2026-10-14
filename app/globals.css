@@ -246,6 +246,7 @@ html[data-seen] .loader { display:none; }
 .reel-frame { position:relative; aspect-ratio:4 / 5; overflow:hidden; display:grid; place-items:center; background:radial-gradient(80% 60% at 30% 20%, rgba(201,164,92,.18), transparent 60%), linear-gradient(170deg, #1a1813, #050505); }
 .reel-frame::before { content:''; position:absolute; inset:14px; border:1px solid rgba(255,255,255,.1); pointer-events:none; transition:inset 600ms var(--ease-out), border-color 600ms ease; }
 .reel-frame video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.reel-frame video:fullscreen { object-fit:contain; background:#000; }
 .reel-play { position:relative; z-index:1; display:grid; place-items:center; width:72px; height:72px; border-radius:50%; border:1px solid rgba(232,213,166,.6); background:rgba(0,0,0,.35); color:var(--champagne); cursor:pointer; -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); transition:transform 420ms var(--ease-out), background-color 300ms ease, color 300ms ease; }
 .reel-play svg { width:20px; margin-left:3px; fill:currentColor; }
 .reel-empty .reel-play { cursor:default; opacity:.6; }
