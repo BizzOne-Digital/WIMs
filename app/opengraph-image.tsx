@@ -25,7 +25,7 @@ export default async function OpengraphImage() {
     ? `data:${stored.mimeType};base64,${Buffer.from(stored.data).toString('base64')}`
     : await asset(...(home.heroImage.startsWith('/') && !upload ? home.heroImage : defaultContent.home.heroImage).slice(1).split('/')).catch(() => asset('wims-hero.png'))
   const globe = await asset('brand', 'wims-globe.png')
-  return new ImageResponse(
+  const render = (photo: string) => new ImageResponse(
     (
       <div style={{ width: '100%', height: '100%', display: 'flex', position: 'relative', background: '#000', color: '#fff', fontFamily: 'Arial, sans-serif' }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -45,4 +45,10 @@ export default async function OpengraphImage() {
     ),
     size,
   )
+  // Rendering is lazy: buffer it so a bad hero image (corrupt upload, odd JPEG) falls back to the default instead of failing the build.
+  try {
+    return new Response(await render(photo).arrayBuffer(), { headers: { 'Content-Type': contentType } })
+  } catch {
+    return render(await asset('wims-hero.png'))
+  }
 }
