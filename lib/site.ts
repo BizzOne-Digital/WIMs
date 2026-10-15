@@ -12,9 +12,10 @@ export const routes = [
 ] as const
 
 // Testimonial videos are hard-coded by design (not managed in the admin).
-// Add { title, name, role, src: '/videos/x.mp4', poster: '/videos/x.jpg' }.
-export type Testimonial = { title: string; name?: string; role?: string; src?: string; poster?: string }
+// Add { title, name, role, src: '/videos/x.mp4', poster: '/videos/x.jpg' } or { title, youtube: '<video id>' }.
+export type Testimonial = { title: string; name?: string; role?: string; src?: string; poster?: string; youtube?: string }
 export const testimonials: Testimonial[] = [
   { title: 'Building a business of my own', role: 'Entrepreneur story', src: '/vids/WIMS%20Entrepreneur%20testimonial%20video.mp4', poster: '/vids/WIMS%20Entrepreneur%20testimonial%20video.jpg' },
   { title: 'Taking control of my own money', role: 'Member story', src: '/vids/Wims%202nd%20testimonial.mp4', poster: '/vids/Wims%202nd%20testimonial.jpg' },
+  { title: 'Member story', youtube: 'cVfSWCpf6Nw' },
 ]
