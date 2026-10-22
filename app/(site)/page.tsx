@@ -15,6 +15,8 @@ export default async function Home() {
   const isAdminImage = (url?: string) => !!url && (url.startsWith(UPLOAD_PREFIX) || /^https?:\/\//.test(url))
   return (
     <>
+      {/* Google AdSense: home page only. React hoists this async script into <head>. */}
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2764564559590744" crossOrigin="anonymous" />
       {/* Act 1: the hook */}
       <section className="hero" aria-labelledby="hero-title">
         <div className="hero-media">

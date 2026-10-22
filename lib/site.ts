@@ -16,4 +16,5 @@ export const routes = [
 export type Testimonial = { title: string; name?: string; role?: string; src?: string; poster?: string; youtube?: string }
 export const testimonials: Testimonial[] = [
   { title: 'Member story', youtube: 'cVfSWCpf6Nw' },
+  { title: 'Member story', youtube: 'GmnIfwNT68w' },
 ]
