@@ -149,6 +149,10 @@ html[data-seen] .loader { display:none; }
 .hero-media img { object-fit:cover; object-position:center; scale:-1 1; }
 /* Second hero image (client "AI Business School" scene): not mirrored, graded toward the black/gold palette */
 .hero-media img.hero-slide-alt { object-position:center; scale:none; opacity:0; filter:saturate(.6) sepia(.22) brightness(.74) contrast(1.06); animation:hero-xfade 18s ease-in-out var(--intro) infinite; }
+/* Desktop: the wide cover crop cuts the main image (the woman) mid-body; anchor it to the top so her head and face stay in frame */
+@media (min-width: 861px) {
+  .hero-media img.hero-slide:not(.hero-slide-alt) { object-position:center 15%; }
+}
 .hero-veil { position:absolute; inset:0; z-index:-2; background:
   linear-gradient(180deg, rgba(0,0,0,.75) 0%, transparent 22%),
   linear-gradient(90deg, rgba(0,0,0,.88) 0%, rgba(0,0,0,.55) 38%, rgba(0,0,0,.08) 72%),
